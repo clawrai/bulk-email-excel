@@ -1,3 +1,6 @@
+#Developed by clawrai
+#https://github.com/clawrai
+
 import pandas as pd
 import smtplib
 from email.mime.text import MIMEText
@@ -61,3 +64,6 @@ for index, row in recipients.iterrows():
     server.send_message(msg)
     print("Email gönderildi:", recipient)
 server.quit()
+
+#Developed by clawrai
+#https://github.com/clawrai
