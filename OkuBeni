@@ -9,3 +9,5 @@ PDF ekinizin yolunu kodun içinde tanımlayın (isteğe bağlı).
 Script, her bir alıcıya e-postaları bireysel olarak gönderir (CC veya BCC kullanılmaz).
 
 Bu sayede aynı mesajı birden fazla kişiye göndermeniz gerektiğinde e-posta süreciniz çok daha kolay hale gelir.
+
+Kodu yazmadan önce pip install -r requirements.txt kodunu terminale yazmayı unutmayın.
