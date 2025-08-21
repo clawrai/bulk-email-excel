@@ -1,0 +1,11 @@
+Bu Python scripti sayesinde pazarlama, sponsorluk veya diğer toplu e-postaları tek tıkla gönderebilirsiniz.
+
+Mesaj içeriğinizi doğrudan kodun içine ekleyin.
+
+Alıcı bilgilerini (isimler, e-posta adresleri ve özel alanlar) bir Excel dosyasında saklayın.
+
+PDF ekinizin yolunu kodun içinde tanımlayın (isteğe bağlı).
+
+Script, her bir alıcıya e-postaları bireysel olarak gönderir (CC veya BCC kullanılmaz).
+
+Bu sayede aynı mesajı birden fazla kişiye göndermeniz gerektiğinde e-posta süreciniz çok daha kolay hale gelir.
