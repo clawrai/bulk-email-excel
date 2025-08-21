@@ -1,0 +1,63 @@
+import pandas as pd
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+import os
+# 1. Excel dosyasını oku
+df = pd.read_excel("emails.xlsx") # Excel dosyasının adı, kendi dosyanızın adını yazabilirsiniz.
+
+# 2. Sütun adlarındaki boşlukları temizle
+df.columns = df.columns.str.strip()
+
+# 3. Mesaj ve bilgi kısmını ilk satırdan alır.(Python 0'dan başladığı için 0. satır)
+message_content = df.loc[0, "Message"] #Message sütunundan email mesajını alır
+info_content = df.loc[0, "Info"] & # Info sütunundan emailin açıklamasını alır
+
+# 4. Alıcı listesini 2. satırdan itibaren alır ve boş satırları atlar.(NA değerleri atlar)
+recipients = df[["Name", "Email"]].dropna()
+
+# 5. SMTP ayarları
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
+SENDER_EMAIL = "ornek@gmail.com" # Gönderen e-posta adresi
+SENDER_PASSWORD = "şifre"   # Gönderen e-posta şifresi (uygulama şifresi kullanılması önerilir, hotmaile uyarlayabilirsiniz.)
+
+
+# 6. Sunucu bağlantısı kurma
+server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+server.starttls()
+server.login(SENDER_EMAIL, SENDER_PASSWORD)
+# 7. Her alıcıya göndermek için row döngüsü
+for index, row in recipients.iterrows():
+    recipient = row["Email"]   # Sütünün ismini Email olarak alır, değiştirebilirsiniz.
+    msg = MIMEMultipart()
+    msg["From"] = SENDER_EMAIL
+    msg["To"] = recipient
+    msg["Subject"] = info_content 
+
+    # pdf yolunuzu belirtirken \ yerine \\ kullanmayı unutmayın.
+    pdf_path = "pdf yolunuz"  # PDF dosyasının tam yolu
+    if os.path.exists(pdf_path):
+        with open(pdf_path, "rb") as f:
+            part = MIMEBase("application", "pdf")
+            part.set_payload(f.read())
+            encoders.encode_base64(part)
+            part.add_header(
+                "Content-Disposition",
+                "attachment",
+                filename=os.path.basename(pdf_path) # PDF dosyasının path'inden ismini alır
+            )
+            msg.attach(part)
+    else:
+        print("PDF dosyası bulunamadı:", pdf_path)
+
+    # Mesajın temelini ekle
+    body = f"{message_content}"
+    msg.attach(MIMEText(body, "plain"))
+
+    # Mesajı gönder
+    server.send_message(msg)
+    print("Email gönderildi:", recipient)
+server.quit()
